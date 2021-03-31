@@ -2,6 +2,7 @@ package com.example.findgroupeat;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnRegister;
     private EditText etEmail;
     private EditText etPassword;
+    private EditText etUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,15 +29,29 @@ public class LoginActivity extends AppCompatActivity {
         btnRegister = (Button) findViewById(R.id.btnRegister);
         etEmail = (EditText) findViewById(R.id.etEmail);
         etPassword = (EditText) findViewById(R.id.etPassword);
+        etUsername = (EditText) findViewById(R.id.etUserName);
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+
+        if (currentUser != null) {
+            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+        } else {
+
+        }
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ParseUser.logInInBackground(etEmail.getText().toString(), etPassword.getText().toString(), new LogInCallback() {
+                ParseUser.logInInBackground(etUsername.getText().toString(), etPassword.getText().toString(), new LogInCallback() {
                     public void done(ParseUser user, ParseException e) {
                         if (user != null) {
                             Toast.makeText(getApplicationContext(), "User successfully logged in!", Toast.LENGTH_LONG).show();
+                            etUsername.setText("");
+                            etEmail.setText("");
+                            etPassword.setText("");
                             // Hooray! The user is logged in.
+                            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(i);
                         } else {
                             Toast.makeText(getApplicationContext(), "An error has occurred trying to login. Please try again!", Toast.LENGTH_LONG).show();
                         }
@@ -49,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ParseUser user = new ParseUser();
+                user.setUsername(etUsername.getText().toString());
                 user.setEmail(etEmail.getText().toString());
                 user.setPassword(etPassword.getText().toString());
                 user.signUpInBackground(new SignUpCallback() {
@@ -56,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (e == null) {
                             Toast.makeText(getApplicationContext(), "User successfully created!", Toast.LENGTH_LONG).show();
                         } else {
+                            user.logOut();
                             Toast.makeText(getApplicationContext(), "An Error occurred. Please try again!", Toast.LENGTH_LONG).show();
                             // Sign up didn't succeed. Look at the ParseException
                             // to figure out what went wrong
