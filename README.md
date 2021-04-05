@@ -28,18 +28,20 @@ An app that allows the user to group up with 1-6 other users and search nearby r
 
 **Required Must-have Stories**
 
-* User can create an account and login
-* Users can create a group
-* Users can swipe on nearby restauraunts
-* User can click on restauraunt and see details such as type of food they serve, menu, more pictures of inside, outside, reviews, etc.
-
+- [x] User can create an account and login
+- [x] Users can create a lobby
+- [] Users can swipe on nearby restauraunts
+- [] User can click on restauraunt and see details such as type of food they serve, menu, more pictures of inside, outside, reviews, etc.
+- [] User can search for a lobby
+- [] User can use the bottom navigation to direct to an activity
+- [] User can see the most chosen restaurant in the lobby 
 
 
 **Optional Nice-to-have Stories**
 
 * Profile page (Could contain past restauraunts matched with and users rating of said restauraunt)
 * Settings page
-* Implement reviews possibly (when clicking on a restaurant
+* Implement reviews possibly (when clicking on a restaurant)
 * Filter out certain restauraunts user does not want to see (user is vegan, group wants pizza, etc)
 * User chat
 
