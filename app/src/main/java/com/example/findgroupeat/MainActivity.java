@@ -1,6 +1,7 @@
 package com.example.findgroupeat;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -52,8 +55,9 @@ public class MainActivity extends AppCompatActivity {
                                 // Add current user to the lobby
                                 lobby.addUser(ParseUser.getCurrentUser());
                                 Intent i = new Intent(MainActivity.this, LobbyActivity.class);
-                                i.putExtra("lobby", lobby);
+                                i.putExtra("lobby", Parcels.wrap(lobby));
                                 startActivity(i);
+                                Toast.makeText(getApplicationContext(), "Join lobby successfully!", Toast.LENGTH_SHORT).show();
                             }
                             else {
                                 etLobbyName.setText("");

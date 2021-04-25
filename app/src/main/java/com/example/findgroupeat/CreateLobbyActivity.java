@@ -17,6 +17,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 public class CreateLobbyActivity extends AppCompatActivity {
@@ -62,7 +64,7 @@ public class CreateLobbyActivity extends AppCompatActivity {
                                         Toast.makeText(getApplicationContext(), "Failed to create lobby. Try again!", Toast.LENGTH_SHORT).show();
                                     }
                                     Intent i = new Intent(CreateLobbyActivity.this, LobbyActivity.class);
-                                    i.putExtra("lobby", lobby);
+                                    i.putExtra("lobby", Parcels.wrap(lobby));
                                     startActivity(i);
                                     Toast.makeText(getApplicationContext(), "Create lobby successfully!", Toast.LENGTH_SHORT).show();
                                 }

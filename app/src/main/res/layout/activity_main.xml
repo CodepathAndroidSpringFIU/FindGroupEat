@@ -28,7 +28,7 @@
         android:layout_marginTop="30dp"
         android:ems="10"
         android:hint="Lobby Password"
-        android:inputType="textVisiblePassword" />
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/btnCreateLobby"

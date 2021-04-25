@@ -7,15 +7,8 @@
     android:layout_height="match_parent"
     tools:context=".SearchLobbyActivity">
 
-    <SearchView
-        android:id="@+id/sv"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvLobbies"
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
-
-    <ListView
-        android:id="@+id/lvLobbies"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_below="@+id/sv"
-        android:layout_marginTop="50dp" />
+        android:layout_height="match_parent" />
 </RelativeLayout>
