@@ -1,4 +1,4 @@
 package com.example.findgroupeat;
 
-public class User {
+public class CardStackCallback {
 }

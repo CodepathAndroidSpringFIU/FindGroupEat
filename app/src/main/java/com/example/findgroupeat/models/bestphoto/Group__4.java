@@ -1,5 +1,5 @@
 
-package com.example.findgroupeat.models;
+package com.example.findgroupeat.models.bestphoto;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
-public class Group {
+public class Group__4 {
 
     @SerializedName("type")
     @Expose
@@ -15,29 +15,12 @@ public class Group {
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("count")
+    @Expose
+    private Integer count;
     @SerializedName("items")
     @Expose
-    private List<Item> items = null;
-
-    /**
-     * No args constructor for use in serialization
-     * 
-     */
-    public Group() {
-    }
-
-    /**
-     * 
-     * @param name
-     * @param type
-     * @param items
-     */
-    public Group(String type, String name, List<Item> items) {
-        super();
-        this.type = type;
-        this.name = name;
-        this.items = items;
-    }
+    private List<Item__2> items = null;
 
     public String getType() {
         return type;
@@ -55,11 +38,19 @@ public class Group {
         this.name = name;
     }
 
-    public List<Item> getItems() {
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public List<Item__2> getItems() {
         return items;
     }
 
-    public void setItems(List<Item> items) {
+    public void setItems(List<Item__2> items) {
         this.items = items;
     }
 

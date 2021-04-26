@@ -1,53 +1,98 @@
 package com.example.findgroupeat.models;
 
-import com.parse.ParseClassName;
-import com.parse.ParseObject;
+import com.google.gson.annotations.SerializedName;
 
-import org.json.JSONArray;
+public class Restaurant {
+    @SerializedName("name")
+    private String name;
+    @SerializedName("id")
+    private String id;
+    @SerializedName("lng")
+    private String longitude;
+    @SerializedName("lat")
+    private String latitude;
+    @SerializedName("formattedAddress")
+    private String[] address;
+    @SerializedName("distance")
+    private String distance;
+    private RestaurantDetails bestPhoto;
+    private String bestPhotoURL;
 
-import java.util.List;
 
-@ParseClassName("Restaurant")
-public class Restaurant extends ParseObject {
-    public static final String KEY_ID = "objectId";
-    public static final String KEY_NAME = "name";
-    public static final String KEY_DESCRIPTION = "description";
-    public static final String KEY_PHOTO = "photoUrl";
-    public static final String KEY_TAGS = "tags";
 
-    public String getName() {
-        return getString(KEY_NAME);
+    public Restaurant(String name, String id, String longitude, String latitude, String[] address, String distance, RestaurantDetails bestPhoto, String bestPhotoURL) {
+        this.name = name;
+        this.id = id;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.address = address;
+        this.distance = distance;
+        this.bestPhoto = bestPhoto;
+        this.bestPhotoURL = bestPhoto.getPrefix() + bestPhoto.getSize() + bestPhoto.getSuffix();
+
+    }
+
+    public RestaurantDetails getBestPhoto() {
+        return bestPhoto;
+    }
+
+    public void setBestPhoto(RestaurantDetails bestPhoto) {
+        this.bestPhoto = bestPhoto;
+    }
+
+    public String getBestPhotoURL() {
+        return bestPhotoURL;
+    }
+
+    public void setBestPhotoURL(String bestPhotoURL) {
+        this.bestPhotoURL = bestPhotoURL;
     }
 
     public void setName(String name) {
-        put(KEY_NAME, name);
+        this.name = name;
     }
 
-    public String getDescription() {
-        return getString(KEY_DESCRIPTION);
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setDescription(String description) {
-        put(KEY_DESCRIPTION, description);
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
-    public String getPhoto() {
-        return getString(KEY_PHOTO);
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 
-    public void setPhoto(String photoUrl) {
-        put(KEY_PHOTO, photoUrl);
+    public void setAddress(String[] address) {
+        this.address = address;
     }
 
-    public JSONArray getTags() {
-        return getJSONArray(KEY_TAGS);
+    public void setDistance(String distance) {
+        this.distance = distance;
     }
 
-    public void setTags(List<String> tags) {
-        put(KEY_TAGS, tags);
+    public String getName() {
+        return name;
     }
 
-    public String getID() {
-        return getString(KEY_ID);
+    public String getId() {
+        return id;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public String[] getAddress() {
+        return address;
+    }
+
+    public String getDistance() {
+        return distance;
     }
 }
