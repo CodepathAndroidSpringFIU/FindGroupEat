@@ -1,4 +1,4 @@
-package com.example.findgroupeat;
+package com.example.findgroupeat.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.findgroupeat.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -35,6 +36,8 @@ public class LoginActivity extends AppCompatActivity {
 
         if (currentUser != null) {
             Intent i = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(i);
+            finish();
         } else {
 
         }
