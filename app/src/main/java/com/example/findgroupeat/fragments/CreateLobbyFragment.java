@@ -1,16 +1,23 @@
-package com.example.findgroupeat;
+package com.example.findgroupeat.fragments;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.findgroupeat.LobbyActivity;
+import com.example.findgroupeat.R;
 import com.example.findgroupeat.models.Lobby;
+import com.example.findgroupeat.ui.LoginActivity;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -21,20 +28,24 @@ import org.parceler.Parcels;
 
 import java.util.List;
 
-public class CreateLobbyActivity extends AppCompatActivity {
+public class CreateLobbyFragment extends Fragment {
 
     EditText etName;
     EditText etPass;
     Button btnCreate;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_lobby);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_create_lobby, container, false);
+    }
 
-        etName = findViewById(R.id.etName);
-        etPass = findViewById(R.id.etPass);
-        btnCreate = findViewById(R.id.btnCreate);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        etName = view.findViewById(R.id.etName);
+        etPass = view.findViewById(R.id.etPass);
+        btnCreate = view.findViewById(R.id.btnCreate);
 
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +61,7 @@ public class CreateLobbyActivity extends AppCompatActivity {
                         if (e == null && !objects.isEmpty()) {
                             etName.setText("");
                             etPass.setText("");
-                            Toast.makeText(getApplicationContext(), "This lobby already exists!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "This lobby already exists!", Toast.LENGTH_SHORT).show();
                         } else if (e == null) {
                             lobby.setName(name);
                             lobby.setPasword(pass);
@@ -61,19 +72,19 @@ public class CreateLobbyActivity extends AppCompatActivity {
                                     if (exception != null) {
                                         etName.setText("");
                                         etPass.setText("");
-                                        Toast.makeText(getApplicationContext(), "Failed to create lobby. Try again!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), "Failed to create lobby. Try again!", Toast.LENGTH_SHORT).show();
                                     }
-                                    Intent i = new Intent(CreateLobbyActivity.this, LobbyActivity.class);
+                                    Intent i = new Intent(getContext(), LobbyActivity.class);
                                     i.putExtra("lobby", Parcels.wrap(lobby));
                                     startActivity(i);
-                                    Toast.makeText(getApplicationContext(), "Create lobby successfully!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "Create lobby successfully!", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
                         else {
                             etName.setText("");
                             etPass.setText("");
-                            Toast.makeText(getApplicationContext(), "Something goes wrong. Try again!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Something goes wrong. Try again!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -81,4 +92,5 @@ public class CreateLobbyActivity extends AppCompatActivity {
             }
         });
     }
+
 }

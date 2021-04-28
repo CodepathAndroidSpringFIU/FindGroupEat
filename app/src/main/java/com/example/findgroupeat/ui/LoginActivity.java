@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.findgroupeat.MainActivity;
 import com.example.findgroupeat.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
