@@ -18,18 +18,26 @@
         tools:layout_editor_absoluteY="71dp"
         tools:text="Anna's Lobby" />
 
-    <ListView
-        android:id="@+id/lvUsers"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipeContainer"
         android:layout_width="wrap_content"
         android:layout_height="300dp"
         android:layout_below="@+id/tvLobbyName"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="30dp">
+
+        <ListView
+            android:id="@+id/lvUsers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <Button
         android:id="@+id/btnSwipe"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/lvUsers"
+        android:layout_below="@+id/swipeContainer"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:background="#000000"
