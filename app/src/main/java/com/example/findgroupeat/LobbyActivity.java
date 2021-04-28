@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.findgroupeat.models.Lobby;
 import com.parse.FindCallback;
@@ -27,6 +28,9 @@ public class LobbyActivity extends AppCompatActivity {
     TextView tvLobbyName;
     ListView lvUsers;
     Button btnSwipe;
+    SwipeRefreshLayout swipeContainer;
+    List<String> usernames;
+    ArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +40,36 @@ public class LobbyActivity extends AppCompatActivity {
         tvLobbyName = findViewById(R.id.tvLobbyName);
         lvUsers = findViewById(R.id.lvUsers);
         btnSwipe = findViewById(R.id.btnSwipe);
+        swipeContainer = findViewById(R.id.swipeContainer);
 
         Lobby lobby = (Lobby) Parcels.unwrap(getIntent().getParcelableExtra("lobby"));
         tvLobbyName.setText(lobby.getName());
 
 
         ParseQuery<ParseUser> query = lobby.getUsers().getQuery();
-        List<String> usernames = new ArrayList<>();
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.user,usernames);
+        usernames = new ArrayList<>();
+        adapter = new ArrayAdapter<String>(this,R.layout.user,usernames);
         lvUsers.setAdapter(adapter);
 
+        btnSwipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LobbyActivity.this, RestaurantsActivity.class);
+                startActivity(i);
+            }
+        });
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryUsers(query, usernames);
+            }
+        });
+
+        queryUsers(query, usernames);
+    }
+
+    private void queryUsers(ParseQuery<ParseUser> query, List<String> usernames) {
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> users, ParseException e) {
@@ -59,14 +83,7 @@ public class LobbyActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
-
-        btnSwipe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(LobbyActivity.this, RestaurantsActivity.class);
-                startActivity(i);
-            }
-        });
-
     }
+
+
 }
