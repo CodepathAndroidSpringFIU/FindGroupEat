@@ -3,6 +3,10 @@ plugins {
     id 'com.google.secrets_gradle_plugin' version '0.4'
 }
 
+def localPropertiesFile = rootProject.file("local.properties")
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(localPropertiesFile))
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -15,6 +19,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "FQ_CLIENT_ID", localProperties['FQ_CLIENT_ID'])
+        buildConfigField("String", "FQ_CLIENT_SECRET", localProperties['FQ_CLIENT_SECRET'])
     }
 
     buildTypes {
@@ -32,6 +38,7 @@ android {
 dependencies {
 
     implementation 'org.parceler:parceler-api:1.1.12'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     annotationProcessor 'org.parceler:parceler:1.1.12'
     implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
     implementation "io.reactivex.rxjava3:rxjava:3.0.0"
@@ -56,4 +63,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1' // for logging API calls to LogCat
     implementation 'org.parceler:parceler-api:1.1.12'
     annotationProcessor 'org.parceler:parceler:1.1.12'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    // Glide v4 uses this new annotation processor -- see https://bumptech.github.io/glide/doc/generatedapi.html
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 }

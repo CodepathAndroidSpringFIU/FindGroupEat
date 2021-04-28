@@ -1,7 +1,9 @@
 package com.example.findgroupeat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -55,6 +57,14 @@ public class LobbyActivity extends AppCompatActivity {
                     usernames.add(user.getUsername());
                 }
                 adapter.notifyDataSetChanged();
+            }
+        });
+
+        btnSwipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LobbyActivity.this, RestaurantsActivity.class);
+                startActivity(i);
             }
         });
 

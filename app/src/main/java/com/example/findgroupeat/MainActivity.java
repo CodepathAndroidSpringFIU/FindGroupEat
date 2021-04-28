@@ -1,94 +1,74 @@
 package com.example.findgroupeat;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.content.Intent;
+
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import com.example.findgroupeat.models.Lobby;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
-import org.parceler.Parcels;
 
-import java.util.List;
+import com.example.findgroupeat.fragments.CreateLobbyFragment;
+import com.example.findgroupeat.fragments.HomeFragment;
+import com.example.findgroupeat.fragments.ProfileFragment;
+
+import com.example.findgroupeat.fragments.SearchLobbyFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText etLobbyName;
-    EditText etLobbyPass;
-    Button btnEnter;
-    Button btnCreateLobby;
-    Button btnSearchLobby;
+    final FragmentManager fragmentManager = getSupportFragmentManager();
+
+    Toolbar toolbar;
+    BottomNavigationView bottomNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        etLobbyName = findViewById(R.id.etLobbyName);
-        etLobbyPass = findViewById(R.id.etLobbyPass);
-        btnCreateLobby = findViewById(R.id.btnCreateLobby);
-        btnSearchLobby = findViewById(R.id.btnSearchLobby);
-        btnEnter = findViewById(R.id.btnEnter);
+        toolbar = findViewById(R.id.toolbar_main);
+        bottomNav = findViewById(R.id.bottom_navigation);
 
-        btnEnter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ParseQuery<Lobby> query = ParseQuery.getQuery(Lobby.class);
-                String lobbyName = etLobbyName.getText().toString();
-                String lobbyPass = etLobbyPass.getText().toString();
-                query.whereEqualTo("name", lobbyName);
-                query.findInBackground(new FindCallback<Lobby>() {
-                    @Override
-                    public void done(List<Lobby> objects, ParseException e) {
-                        if (e == null) {
-                            if (!objects.isEmpty() && lobbyPass.equals(objects.get(0).getPassword())) {
-                                Lobby lobby = objects.get(0);
-                                // Add current user to the lobby
-                                lobby.addUser(ParseUser.getCurrentUser());
-                                Intent i = new Intent(MainActivity.this, LobbyActivity.class);
-                                i.putExtra("lobby", Parcels.wrap(lobby));
-                                startActivity(i);
-                                Toast.makeText(getApplicationContext(), "Join lobby successfully!", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                etLobbyName.setText("");
-                                etLobbyPass.setText("");
-                                Toast.makeText(getApplicationContext(), "Lobby name/password is invalid!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        else {
-                            etLobbyName.setText("");
-                            etLobbyPass.setText("");
-                            Toast.makeText(getApplicationContext(), "Something goes wrong. Try again!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        });
+        setSupportActionBar(toolbar);
 
-        btnCreateLobby.setOnClickListener(new View.OnClickListener() {
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, CreateLobbyActivity.class);
-                startActivity(i);
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment fragment;
+                switch (item.getItemId()) {
+                    case R.id.action_home:
+                        fragment = new HomeFragment();
+                        break;
+                    case R.id.action_create:
+                        fragment = new CreateLobbyFragment();
+                        break;
+                    case R.id.action_search:
+                        fragment = new SearchLobbyFragment();
+                        break;
+                    case R.id.action_profile:
+                    default:
+                        fragment = new ProfileFragment();
+                        break;
+                }
+                fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                return true;
             }
-        });
 
-        btnSearchLobby.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, SearchLobbyActivity.class);
-                startActivity(i);
-            }
+
         });
+        bottomNav.setSelectedItemId(R.id.action_home);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
     }
 }

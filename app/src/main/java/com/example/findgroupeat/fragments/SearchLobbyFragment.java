@@ -1,45 +1,59 @@
-package com.example.findgroupeat;
+package com.example.findgroupeat.fragments;
 
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.inputmethod.EditorInfo;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 
+import com.example.findgroupeat.R;
 import com.example.findgroupeat.adapters.LobbyAdapter;
 import com.example.findgroupeat.models.Lobby;
+import com.example.findgroupeat.ui.LoginActivity;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchLobbyActivity extends AppCompatActivity {
+public class SearchLobbyFragment extends Fragment {
 
     RecyclerView rvLobbies;
     List<Lobby> lobbyList;
     LobbyAdapter adapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_lobby);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        return inflater.inflate(R.layout.activity_search_lobby, container, false);
+    }
 
-        rvLobbies = findViewById(R.id.rvLobbies);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        rvLobbies = view.findViewById(R.id.rvLobbies);
         lobbyList = new ArrayList<>();
 
-        adapter = new LobbyAdapter(this, lobbyList);
+        adapter = new LobbyAdapter(getContext(), lobbyList);
         rvLobbies.setAdapter(adapter);
-        rvLobbies.setLayoutManager(new LinearLayoutManager(this));
+        rvLobbies.setLayoutManager(new LinearLayoutManager(getContext()));
         getLobbyList();
     }
 
@@ -57,11 +71,14 @@ public class SearchLobbyActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.menu_search, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
+        SearchView.SearchAutoComplete searchText = searchView.findViewById(R.id.search_src_text);
+        searchText.setTextColor(Color.WHITE);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -75,6 +92,5 @@ public class SearchLobbyActivity extends AppCompatActivity {
                 return false;
             }
         });
-        return true;
     }
 }

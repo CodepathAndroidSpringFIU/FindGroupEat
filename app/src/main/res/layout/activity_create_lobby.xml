@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateLobbyActivity">
+    tools:context=".fragments.CreateLobbyActivity">
 
     <TextView
         android:id="@+id/tvTitle"
@@ -21,10 +21,13 @@
         android:id="@+id/btnCreate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvTitle"
+        android:layout_below="@id/etPass"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="300dp"
-        android:text="Create" />
+        android:layout_marginTop="100dp"
+        android:background="#000000"
+        android:text="Create"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/etName"
@@ -32,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTitle"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="100dp"
         android:ems="10"
         android:hint="Lobby Name"
         android:inputType="textPersonName" />
@@ -47,14 +50,5 @@
         android:ems="10"
         android:hint="Lobby Password"
         android:inputType="textVisiblePassword" />
-
-    <CheckBox
-        android:id="@+id/cb1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etPass"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:text="Italian" />
 
 </RelativeLayout>

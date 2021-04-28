@@ -159,15 +159,6 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
                         }
                         initialize();
 
-
-
-
-
-
-
-
-
-
                 }
 
 
