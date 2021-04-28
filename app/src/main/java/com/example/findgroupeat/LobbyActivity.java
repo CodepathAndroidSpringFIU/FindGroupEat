@@ -78,7 +78,9 @@ public class LobbyActivity extends AppCompatActivity {
                 }
 
                 for (ParseUser user : users) {
-                    usernames.add(user.getUsername());
+                    if (!usernames.contains(user.getUsername())) {
+                        usernames.add(user.getUsername());
+                    }
                 }
                 adapter.notifyDataSetChanged();
             }
