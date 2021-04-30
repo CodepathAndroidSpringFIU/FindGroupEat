@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.findgroupeat.models.Lobby;
+import com.example.findgroupeat.models.parsemodels.Lobby;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;

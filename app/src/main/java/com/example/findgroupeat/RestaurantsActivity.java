@@ -1,23 +1,37 @@
 package com.example.findgroupeat;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DiffUtil;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.findgroupeat.adapters.RestaurantsAdapter;
+import com.example.findgroupeat.models.Restaurant;
+import com.example.findgroupeat.models.RestaurantDetails;
 import com.example.findgroupeat.models.bestphoto.BestPhoto;
 import com.example.findgroupeat.models.Explore;
 import com.example.findgroupeat.models.GPSTracker;
@@ -25,8 +39,14 @@ import com.example.findgroupeat.models.Group;
 import com.example.findgroupeat.models.Item;
 import com.example.findgroupeat.models.Photos2;
 import com.example.findgroupeat.models.bestphoto.Bestphotoreal2;
+
+
+import com.example.findgroupeat.models.parsemodels.likedRestaurant;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
@@ -53,8 +73,9 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
     private final String CLIENT_SECRET = BuildConfig.FQ_CLIENT_SECRET;
     private static final String BASE_URL = "https://api.foursquare.com/v2/";
     private final static String version = "20190519";
-    private GPSTracker gpsTracker;
+    private GPSTracker gps;
     private Retrofit retrofit = null;
+    private int limit = 5;
 
 
     TranslateAnimation animation;
@@ -63,18 +84,49 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
     private RestaurantsAdapter adapter;
     private DrawerLayout drawerLayout;
     private RestaurantService restaurantService;
-    private Call<Bestphotoreal2> call2;
-
+    private Context mContext;
+    String fullCoordinates = null;
 
 
     List<Item> restaurantList;
+    List<Item> likedRestaurants;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurants);
-        gpsTracker = new GPSTracker();
+
+        mContext = this;
+        likedRestaurants = new ArrayList<>();
+
+
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(RestaurantsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+        } else {
+            Toast.makeText(mContext,"You need to have granted permission",Toast.LENGTH_SHORT).show();
+            gps = new GPSTracker(mContext, RestaurantsActivity.this);
+
+            // Check if GPS enabled
+            if (gps.canGetLocation()) {
+
+                double latitude = gps.getLatitude();
+                double longitude = gps.getLongitude();
+                fullCoordinates = gps.getLatitude() + "," + gps.getLongitude();
+
+                // \n is for new line
+                Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+            } else {
+                // Can't get location.
+                // GPS or network is not enabled.
+                // Ask user to enable GPS/network in settings.
+                gps.showSettingsAlert();
+            }
+        }
+        Log.v(TAG, "full cords are : " + fullCoordinates);
+
         RxJava3CallAdapterFactory rxAdapter = RxJava3CallAdapterFactory.create();
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
@@ -87,19 +139,21 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
         adapter = new RestaurantsAdapter(restaurantList, getApplicationContext());
         drawerLayout = findViewById(R.id.drawer_layout);
         cardStackLayoutManager = new CardStackLayoutManager(this, this);
+
+
+
         restaurantList = new ArrayList<>();
+        Call<Explore> call1 = restaurantService.getRestaurants(CLIENT_ID, CLIENT_SECRET, fullCoordinates, "browse", "10000", 5, "4d4b7105d754a06374d81259",
+                version);
 
 
-        System.out.println("amount of items in the main activity after get restaurants call is " + restaurantList.size());
 
         setUpNavigation();
 
 
-        Call<Explore> call1 = restaurantService.getRestaurants(CLIENT_ID, CLIENT_SECRET, "40.7099,-73.962", "browse", "10000", 5, "4d4b7105d754a06374d81259",
-                version);
+        
 
         call1.enqueue(new Callback<Explore>() {
-            List<String> urlPhotos = new ArrayList<>();
 
             @Override
             public void onResponse(Call<Explore> call, Response<Explore> response) {
@@ -107,18 +161,20 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
                 int totalResults = venue.getResponse().getTotalResults();
                 Log.v(TAG, "total results is: " + totalResults);
                 List<Group> groupList = venue.getResponse().getGroups();
-                //restaurantList = groupList.get(0).getItems();
+
                 restaurantList.addAll(groupList.get(0).getItems());
+
                 System.out.println("the amount of items in restaurant List is " + restaurantList.size());
-                totalResults = (totalResults < 5) ? totalResults : 5;
+                totalResults = Math.min(totalResults, 5);
                 for (int i = 0; i < totalResults; i++) {
                     Call<Bestphotoreal2> call2 = restaurantService.getRestaurantDetails(restaurantList.get(i).getVenue().getId(), CLIENT_ID, CLIENT_SECRET, version);
                     restaurantList.get(i).setPhotoUrl(getPhotos(call2, totalResults));
                     initialize();
+
                 }
 
                 System.out.println("the amount of items in restaurant List after getPhotosCall " + restaurantList.size());
-                //initialize();
+
 
             }
 
@@ -127,49 +183,69 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
                 System.out.println("explore failed");
             }
         });
+        initialize();
+
+
+
 
 
     }
+
+
+
+
+
 
     public List<String> getPhotos(Call<Bestphotoreal2> call2, int totalResults) {
-            List<String> photoUrlList2 = new ArrayList<>();
-            call2.enqueue(new Callback<Bestphotoreal2>() {
-                @Override
-                public void onResponse(Call<Bestphotoreal2> call, Response<Bestphotoreal2> response) {
+        List<String> photoUrlList2 = new ArrayList<>();
+        call2.enqueue(new Callback<Bestphotoreal2>() {
+            @Override
+            public void onResponse(Call<Bestphotoreal2> call, Response<Bestphotoreal2> response) {
 
-                    Bestphotoreal2 bestPhoto = response.body();
-                    Log.v(TAG, String.valueOf(response.body()));
-                    List<String> photoUrlList = new ArrayList<>();
-                    int numOfPhotos = bestPhoto.getResponse().getVenue().getPhotos().getCount();
-                    numOfPhotos = (numOfPhotos < 9) ? numOfPhotos : 9;
+                Bestphotoreal2 bestPhoto = response.body();
+                Log.v(TAG, String.valueOf(response.body()));
+                List<String> photoUrlList = new ArrayList<>();
 
-                    String prefix = bestPhoto.getResponse().getVenue().getBestPhoto().getPrefix();
-                    String suffix = bestPhoto.getResponse().getVenue().getBestPhoto().getSuffix();
-                    String photoUrl = prefix + "150x150" + suffix;
-                    Log.v(TAG, "photoURL is " + photoUrl);
+                    int numOfPhotos = response.body().getResponse().getVenue().getPhotos().getCount();
+                    Log.v(TAG, "num of photos is: " + numOfPhotos);
+                    numOfPhotos = Math.min(numOfPhotos, 5);
+                String prefix = bestPhoto.getResponse().getVenue().getBestPhoto().getPrefix();
+                String suffix = bestPhoto.getResponse().getVenue().getBestPhoto().getSuffix();
+                String photoUrl = prefix + "150x150" + suffix;
+                Log.v(TAG, "photoURL is " + photoUrl);
 
-                        photoUrlList.add(photoUrl);
-                        photoUrlList2.add(photoUrl);
-                        Log.v(TAG, "num of items in photoUrl is " + photoUrlList.size());
-                        if (!photoUrlList.contains(photoUrl)) {
-                            for (int i = 0; i < restaurantList.size(); i++) {
-                                restaurantList.get(i).addPhotoUrl(photoUrlList, photoUrl);
+                photoUrlList.add(photoUrl);
+                photoUrlList2.add(photoUrl);
+                Log.v(TAG, "num of items in photoUrl is " + photoUrlList.size());
+                if (!photoUrlList.contains(photoUrl)) {
+                    for (int i = 0; i < restaurantList.size(); i++) {
+                        Log.v(TAG, "restaurant List Size is : " + restaurantList.size());
+                        restaurantList.get(i).addPhotoUrl(photoUrlList, photoUrl);
+                        restaurantList.get(i).setPhotoUrl(photoUrlList);
+                        //restaurantList.get(i).getVenue().getDefaultHours().setStatus(status);
 
-                            }
-                        }
-                        initialize();
 
+
+                    }
                 }
+                initialize();
 
 
-                @Override
-                public void onFailure(Call<Bestphotoreal2> call, Throwable t) {
-                    Log.v(TAG, "Failed on call to photo");
-                }
+            }
 
-            });
+
+            @Override
+            public void onFailure(Call<Bestphotoreal2> call, Throwable t) {
+                Log.v(TAG, "Failed on call to photo");
+            }
+
+        });
         return photoUrlList2;
     }
+
+
+
+
 
 
 
@@ -183,28 +259,37 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
     @Override
     public void onCardDragging(Direction direction, float ratio) {
         Log.d(TAG, "onCardSwiped: p=" + cardStackLayoutManager.getTopPosition() + " d=" + direction);
-        if (direction == Direction.Right) {
-            Toast.makeText(RestaurantsActivity.this, "Direction Right", Toast.LENGTH_SHORT).show();
-        }
-        if (direction == Direction.Top) {
-            Toast.makeText(RestaurantsActivity.this, "Direction Top", Toast.LENGTH_SHORT).show();
-        }
-        if (direction == Direction.Left) {
-            Toast.makeText(RestaurantsActivity.this, "Direction Left", Toast.LENGTH_SHORT).show();
-        }
-        if (direction == Direction.Bottom) {
-            Toast.makeText(RestaurantsActivity.this, "Direction Bottom", Toast.LENGTH_SHORT).show();
-        }
-
 
     }
 
 
     @Override
     public void onCardSwiped(Direction direction) {
+        createLikedRestaurant();
         if (cardStackLayoutManager.getTopPosition() == adapter.getItemCount() - 5) {
             paginate();
         }
+    }
+
+    public void createLikedRestaurant() {
+        int topPosition = cardStackLayoutManager.getTopPosition();
+        String likedRestaurantID = adapter.getRestaurants().get(topPosition).getVenue().getId();
+        ParseObject likedRestaurants = new ParseObject("likedRestaurants");
+        likedRestaurants.put("restaurantID", likedRestaurantID);
+        likedRestaurants.put("UsersLikedRestaurantsTest", ParseUser.getCurrentUser());
+        likedRestaurants.put("UserWhoLikedRestaurant", ParseUser.getCurrentUser());
+        likedRestaurants.saveInBackground(e ->  {
+            if (e == null) {
+                //saved
+            } else {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void readLikedRestaurants() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("likedRestaurants");
+
     }
 
     @Override
@@ -219,11 +304,12 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
 
     @Override
     public void onCardAppeared(View view, int position) {
-        TextView tv = view.findViewById(R.id.item_name);
+        //TextView tv = view.findViewById(R.id.item_name);
     }
 
     @Override
     public void onCardDisappeared(View view, int position) {
+        //TextView tv = view.findViewById(R.id.item_name);
         String restaurantName = restaurantList.get(0).getVenue().getName();
     }
 

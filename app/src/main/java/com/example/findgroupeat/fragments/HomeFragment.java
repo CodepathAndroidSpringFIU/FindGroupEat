@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.example.findgroupeat.LobbyActivity;
 import com.example.findgroupeat.R;
 
-import com.example.findgroupeat.models.Lobby;
+import com.example.findgroupeat.models.parsemodels.Lobby;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;

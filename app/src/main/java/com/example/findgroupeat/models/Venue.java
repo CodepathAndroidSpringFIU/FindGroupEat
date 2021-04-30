@@ -18,6 +18,9 @@ public class Venue {
     @SerializedName("contact")
     @Expose
     private Contact contact;
+    @SerializedName("rating")
+    @Expose
+    private Double rating;
     @SerializedName("location")
     @Expose
     private Location location;
@@ -45,6 +48,12 @@ public class Venue {
     @SerializedName("hasPerk")
     @Expose
     private Boolean hasPerk;
+    @SerializedName("description")
+    @Expose
+    private String description;
+    @SerializedName("defaultHours")
+    @Expose
+    private DefaultHours defaultHours;
 
     /**
      * No args constructor for use in serialization
@@ -82,6 +91,30 @@ public class Venue {
         this.referralId = referralId;
         this.venueChains = venueChains;
         this.hasPerk = hasPerk;
+    }
+
+    public DefaultHours getDefaultHours() {
+        return defaultHours;
+    }
+
+    public void setDefaultHours(DefaultHours defaultHours) {
+        this.defaultHours = defaultHours;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
     public String getId() {

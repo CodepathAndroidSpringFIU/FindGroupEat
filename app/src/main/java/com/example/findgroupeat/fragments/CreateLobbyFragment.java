@@ -2,7 +2,6 @@ package com.example.findgroupeat.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
@@ -16,8 +15,7 @@ import android.widget.Toast;
 
 import com.example.findgroupeat.LobbyActivity;
 import com.example.findgroupeat.R;
-import com.example.findgroupeat.models.Lobby;
-import com.example.findgroupeat.ui.LoginActivity;
+import com.example.findgroupeat.models.parsemodels.Lobby;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;

@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.findgroupeat.LobbyActivity;
 import com.example.findgroupeat.R;
-import com.example.findgroupeat.models.Lobby;
+import com.example.findgroupeat.models.parsemodels.Lobby;
 
 
 import org.parceler.Parcels;

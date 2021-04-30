@@ -1,5 +1,6 @@
 package com.example.findgroupeat;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 
 import com.example.findgroupeat.models.Item;
@@ -31,6 +32,13 @@ public class CardStackCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        return old.get(oldItemPosition) == newList.get(newItemPosition);
+        return old.get(oldItemPosition).equals(newList.get(newItemPosition));
+    }
+
+    @Nullable
+    @Override
+    public Object getChangePayload(int oldItemPosition, int newItemPosition) {
+        // Implement method if you're going to use ItemAnimator
+        return super.getChangePayload(oldItemPosition, newItemPosition);
     }
 }
