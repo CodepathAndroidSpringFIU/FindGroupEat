@@ -1,4 +1,4 @@
-package com.example.findgroupeat.models;
+package com.example.findgroupeat.models.parsemodels;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
@@ -22,6 +22,8 @@ public class Lobby extends ParseObject {
     public ParseRelation<ParseUser> getUsers() {
         return getRelation(KEY_USERS);
     }
+
+
 
     public void addUser(ParseUser user) {
         getUsers().add(user);
