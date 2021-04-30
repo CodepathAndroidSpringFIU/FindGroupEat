@@ -30,10 +30,10 @@ An app that allows the user to group up with 1-6 other users and search nearby r
 
 - [x] User can create an account and login
 - [x] Users can create a lobby
-- [ ] Users can swipe on nearby restauraunts
-- [ ] User can click on restauraunt and see details such as type of food they serve, menu, more pictures of inside, outside, reviews, etc.
-- [ ] User can search for a lobby
-- [ ] User can use the bottom navigation to direct to an activity
+- [x] Users can swipe on nearby restauraunts
+- [x] User can click on restauraunt and see details such as type of food they serve, menu, more pictures of inside, outside, reviews, etc.
+- [x] User can search for a lobby
+- [x] User can use the bottom navigation to direct to an activity
 - [ ] User can see the most chosen restaurant in the lobby 
 
 
