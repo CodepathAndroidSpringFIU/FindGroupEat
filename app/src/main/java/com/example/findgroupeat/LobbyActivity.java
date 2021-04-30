@@ -55,6 +55,7 @@ public class LobbyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(LobbyActivity.this, RestaurantsActivity.class);
+                i.putExtra("lobby", Parcels.wrap(lobby));
                 startActivity(i);
             }
         });

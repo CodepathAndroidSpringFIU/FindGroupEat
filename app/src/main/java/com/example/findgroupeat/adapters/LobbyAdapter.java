@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.findgroupeat.LobbyActivity;
 import com.example.findgroupeat.R;
 import com.example.findgroupeat.models.parsemodels.Lobby;
+import com.parse.ParseUser;
 
 
 import org.parceler.Parcels;
@@ -128,6 +129,7 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
                         public void onClick(DialogInterface dialog, int which) {
                             String pass = input.getText().toString();
                             if (pass.equals(lobby.getPassword())) {
+                                lobby.addUser(ParseUser.getCurrentUser());
                                 Intent i = new Intent(context, LobbyActivity.class);
                                 i.putExtra("lobby", Parcels.wrap(lobby));
                                 context.startActivity(i);

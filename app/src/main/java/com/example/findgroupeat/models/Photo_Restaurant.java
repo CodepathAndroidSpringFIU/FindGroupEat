@@ -1,6 +1,6 @@
 package com.example.findgroupeat.models;
 
-import com.example.findgroupeat.models.parsemodels.User;
+import com.example.findgroupeat.models.bestphoto.User;
 
 import java.util.HashMap;
 import java.util.Map;

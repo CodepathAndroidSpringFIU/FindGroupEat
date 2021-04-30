@@ -13,11 +13,7 @@ import androidx.recyclerview.widget.DiffUtil;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,25 +21,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.findgroupeat.adapters.RestaurantsAdapter;
-import com.example.findgroupeat.models.Restaurant;
-import com.example.findgroupeat.models.RestaurantDetails;
-import com.example.findgroupeat.models.bestphoto.BestPhoto;
 import com.example.findgroupeat.models.Explore;
 import com.example.findgroupeat.models.GPSTracker;
 import com.example.findgroupeat.models.Group;
 import com.example.findgroupeat.models.Item;
-import com.example.findgroupeat.models.Photos2;
 import com.example.findgroupeat.models.bestphoto.Bestphotoreal2;
 
 
-import com.example.findgroupeat.models.parsemodels.likedRestaurant;
+import com.example.findgroupeat.models.parsemodels.LikedRestaurant;
+import com.example.findgroupeat.models.parsemodels.Lobby;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.parse.CountCallback;
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -52,8 +47,9 @@ import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
 import com.yuyakaido.android.cardstackview.Direction;
 import com.yuyakaido.android.cardstackview.StackFrom;
-import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 import com.yuyakaido.android.cardstackview.SwipeableMethod;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -272,19 +268,64 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
     }
 
     public void createLikedRestaurant() {
-        int topPosition = cardStackLayoutManager.getTopPosition();
-        String likedRestaurantID = adapter.getRestaurants().get(topPosition).getVenue().getId();
-        ParseObject likedRestaurants = new ParseObject("likedRestaurants");
-        likedRestaurants.put("restaurantID", likedRestaurantID);
-        likedRestaurants.put("UsersLikedRestaurantsTest", ParseUser.getCurrentUser());
-        likedRestaurants.put("UserWhoLikedRestaurant", ParseUser.getCurrentUser());
-        likedRestaurants.saveInBackground(e ->  {
-            if (e == null) {
-                //saved
-            } else {
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        final int[] numUsers = new int[1];
+        Lobby lobby = (Lobby) Parcels.unwrap(getIntent().getParcelableExtra("lobby"));
+        ParseQuery<ParseUser> users = lobby.getUsers().getQuery();
+        users.countInBackground(new CountCallback() {
+            @Override
+            public void done(int count, ParseException e) {
+                if (e == null) {
+                    numUsers[0] = count;
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                }
             }
         });
+        int topPosition = cardStackLayoutManager.getTopPosition();
+        String likedRestaurantID = adapter.getRestaurants().get(topPosition).getVenue().getId();
+        ParseQuery<LikedRestaurant> query = ParseQuery.getQuery(LikedRestaurant.class);
+        query.whereEqualTo("restaurantID", likedRestaurantID);
+        query.findInBackground(new FindCallback<LikedRestaurant>() {
+            @Override
+            public void done(List<LikedRestaurant> objects, ParseException e) {
+                if (e == null) {
+                    if (objects.isEmpty()) {
+                        LikedRestaurant restaurant = new LikedRestaurant();
+                        restaurant.setRestaurantID(likedRestaurantID);
+                        restaurant.saveInBackground(er ->  {
+                            if (er == null) {
+                                //saved
+                            } else {
+                                Toast.makeText(getApplicationContext(), er.toString(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                    else {
+                        objects.get(0).increment("likes");
+                        objects.get(0).saveInBackground();
+                        // Check again the number of users in the lobby
+                        if (objects.get(0).getLikes() == numUsers[0]) {
+                            //Return to main lobby
+                        }
+                    }
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+//        ParseObject likedRestaurants = new ParseObject("LikedRestaurants");
+//        likedRestaurants.put("restaurantID", likedRestaurantID);
+//        likedRestaurants.put("UsersLikedRestaurantsTest", ParseUser.getCurrentUser());
+//        likedRestaurants.put("UserWhoLikedRestaurant", ParseUser.getCurrentUser());
+//        likedRestaurants.saveInBackground(e ->  {
+//            if (e == null) {
+//                //saved
+//            } else {
+//                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+//            }
+//        });
     }
 
     public void readLikedRestaurants() {

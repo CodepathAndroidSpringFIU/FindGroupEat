@@ -23,11 +23,9 @@ public class Lobby extends ParseObject {
         return getRelation(KEY_USERS);
     }
 
-
-
     public void addUser(ParseUser user) {
         getUsers().add(user);
-        saveInBackground();;
+        saveInBackground();
     }
 
     public String getName() {
