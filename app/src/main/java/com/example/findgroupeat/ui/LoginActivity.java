@@ -77,7 +77,6 @@ public class LoginActivity extends AppCompatActivity {
                         if (e == null) {
                             Toast.makeText(getApplicationContext(), "User successfully created!", Toast.LENGTH_LONG).show();
                         } else {
-                            user.logOut();
                             Toast.makeText(getApplicationContext(), "An Error occurred. Please try again!", Toast.LENGTH_LONG).show();
                             // Sign up didn't succeed. Look at the ParseException
                             // to figure out what went wrong

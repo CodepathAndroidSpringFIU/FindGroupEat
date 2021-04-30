@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.findgroupeat.adapters.RestaurantsAdapter;
+import com.example.findgroupeat.models.Restaurant;
 import com.example.findgroupeat.models.RestaurantDetails;
 import com.example.findgroupeat.models.bestphoto.BestPhoto;
 import com.example.findgroupeat.models.Explore;
@@ -40,8 +41,12 @@ import com.example.findgroupeat.models.Photos2;
 import com.example.findgroupeat.models.bestphoto.Bestphotoreal2;
 
 
+import com.example.findgroupeat.models.parsemodels.likedRestaurant;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
@@ -79,12 +84,8 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
     private RestaurantsAdapter adapter;
     private DrawerLayout drawerLayout;
     private RestaurantService restaurantService;
-    private Call<Bestphotoreal2> call2;
-    private double latitude;
-    private double longitude;
     private Context mContext;
     String fullCoordinates = null;
-    private ImageView ivRestaurantPic;
 
 
     List<Item> restaurantList;
@@ -96,8 +97,8 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurants);
-        ivRestaurantPic = findViewById(R.id.item_image);
         mContext = this;
+        likedRestaurants = new ArrayList<>();
 
 
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -259,28 +260,37 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
     @Override
     public void onCardDragging(Direction direction, float ratio) {
         Log.d(TAG, "onCardSwiped: p=" + cardStackLayoutManager.getTopPosition() + " d=" + direction);
-        if (direction == Direction.Right) {
-            Toast.makeText(RestaurantsActivity.this, "Direction Right", Toast.LENGTH_SHORT).show();
-        }
-        if (direction == Direction.Top) {
-            Toast.makeText(RestaurantsActivity.this, "Direction Top", Toast.LENGTH_SHORT).show();
-        }
-        if (direction == Direction.Left) {
-            Toast.makeText(RestaurantsActivity.this, "Direction Left", Toast.LENGTH_SHORT).show();
-        }
-        if (direction == Direction.Bottom) {
-            Toast.makeText(RestaurantsActivity.this, "Direction Bottom", Toast.LENGTH_SHORT).show();
-        }
-
 
     }
 
 
     @Override
     public void onCardSwiped(Direction direction) {
-        if (cardStackLayoutManager.getTopPosition() == adapter.getItemCount() - 10) {
+        createLikedRestaurant();
+        if (cardStackLayoutManager.getTopPosition() == adapter.getItemCount() - 5) {
             paginate();
         }
+    }
+
+    public void createLikedRestaurant() {
+        int topPosition = cardStackLayoutManager.getTopPosition();
+        String likedRestaurantID = adapter.getRestaurants().get(topPosition).getVenue().getId();
+        ParseObject likedRestaurants = new ParseObject("likedRestaurants");
+        likedRestaurants.put("restaurantID", likedRestaurantID);
+        likedRestaurants.put("UsersLikedRestaurantsTest", ParseUser.getCurrentUser());
+        likedRestaurants.put("UserWhoLikedRestaurant", ParseUser.getCurrentUser());
+        likedRestaurants.saveInBackground(e ->  {
+            if (e == null) {
+                //saved
+            } else {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void readLikedRestaurants() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("likedRestaurants");
+
     }
 
     @Override

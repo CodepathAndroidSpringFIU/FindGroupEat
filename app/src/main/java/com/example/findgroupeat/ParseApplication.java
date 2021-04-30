@@ -2,7 +2,7 @@ package com.example.findgroupeat;
 
 import android.app.Application;
 
-import com.example.findgroupeat.models.Lobby;
+import com.example.findgroupeat.models.parsemodels.Lobby;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
