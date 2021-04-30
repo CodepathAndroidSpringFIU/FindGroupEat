@@ -74,7 +74,7 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurants);
-        gpsTracker = new GPSTracker(this);
+        gpsTracker = new GPSTracker();
         RxJava3CallAdapterFactory rxAdapter = RxJava3CallAdapterFactory.create();
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()

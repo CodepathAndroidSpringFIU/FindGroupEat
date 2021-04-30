@@ -70,6 +70,7 @@ public class LobbyActivity extends AppCompatActivity {
     }
 
     private void queryUsers(ParseQuery<ParseUser> query, List<String> usernames) {
+        usernames.clear();
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> users, ParseException e) {
@@ -78,11 +79,10 @@ public class LobbyActivity extends AppCompatActivity {
                 }
 
                 for (ParseUser user : users) {
-                    if (!usernames.contains(user.getUsername())) {
-                        usernames.add(user.getUsername());
-                    }
+                    usernames.add(user.getUsername());
                 }
                 adapter.notifyDataSetChanged();
+                swipeContainer.setRefreshing(false);
             }
         });
     }
