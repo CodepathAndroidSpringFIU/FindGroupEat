@@ -72,6 +72,7 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
     private GPSTracker gps;
     private Retrofit retrofit = null;
     private int limit = 5;
+    private final int numUsers = getUserNumInLobby();
 
 
     TranslateAnimation animation;
@@ -267,21 +268,25 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
         }
     }
 
-    public void createLikedRestaurant() {
-        final int[] numUsers = new int[1];
+    public int getUserNumInLobby() {
+        final int[] num = {0};
         Lobby lobby = (Lobby) Parcels.unwrap(getIntent().getParcelableExtra("lobby"));
         ParseQuery<ParseUser> users = lobby.getUsers().getQuery();
         users.countInBackground(new CountCallback() {
             @Override
             public void done(int count, ParseException e) {
                 if (e == null) {
-                    numUsers[0] = count;
+                    num[0] = count;
                 }
                 else {
                     Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
                 }
             }
         });
+        return num[0];
+    }
+    public void createLikedRestaurant() {
+
         int topPosition = cardStackLayoutManager.getTopPosition();
         String likedRestaurantID = adapter.getRestaurants().get(topPosition).getVenue().getId();
         ParseQuery<LikedRestaurant> query = ParseQuery.getQuery(LikedRestaurant.class);
@@ -305,7 +310,7 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
                         objects.get(0).increment("likes");
                         objects.get(0).saveInBackground();
                         // Check again the number of users in the lobby
-                        if (objects.get(0).getLikes() == numUsers[0]) {
+                        if (objects.get(0).getLikes() == numUsers) {
                             //Return to main lobby
                         }
                     }
