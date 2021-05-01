@@ -11,7 +11,7 @@ Original App Design Project - README Template
 
 ## Overview
 ### Description
-An app that allows the user to group up with 1-6 other users and search nearby restaraunts, you swipe if you like the restaurant and if all users of the group swipe on the same restaurant then that will be where you will eat.
+An app that allows the user to group up with 1-6 other users and search nearby restaraunts, you swipe if you like the restaurant and if all users of the group swipe on the same restaurant then that will be where you will eat. Uses Foursquares API to grab nearby locations
 
 ### App Evaluation
 [Evaluation of your app across the following attributes]
