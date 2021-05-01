@@ -119,7 +119,7 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
                 fullCoordinates = gps.getLatitude() + "," + gps.getLongitude();
 
                 // \n is for new line
-                Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
             } else {
                 // Can't get location.
                 // GPS or network is not enabled.
@@ -224,7 +224,6 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
                         Log.v(TAG, "restaurant List Size is : " + restaurantList.size());
                         restaurantList.get(i).addPhotoUrl(photoUrlList, photoUrl);
                         restaurantList.get(i).setPhotoUrl(photoUrlList);
-                        //restaurantList.get(i).getVenue().getDefaultHours().setStatus(status);
 
 
 
@@ -267,7 +266,9 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
 
     @Override
     public void onCardSwiped(Direction direction) {
-        createLikedRestaurant();
+        if (direction == Direction.Right) {
+            createLikedRestaurant();
+        }
         if (cardStackLayoutManager.getTopPosition() == adapter.getItemCount() - 5) {
             paginate();
         }
@@ -302,6 +303,18 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
                     else {
                         objects.get(0).increment("likes");
                         objects.get(0).saveInBackground();
+                        // Check again the number of users in the lobby
+
+                        if (objects.get(0).getLikes() >= numUsers) {
+                            Intent i = new Intent(RestaurantsActivity.this, ResultActivity.class);
+                            String restaurantID = restaurantList.get(cardStackLayoutManager.getTopPosition()-1).getVenue().getId();
+                            Lobby lobby = (Lobby) Parcels.unwrap(getIntent().getParcelableExtra("lobby"));
+                            String lobbyObjectId = lobby.getObjectId();
+                            i.putExtra("restaurantID", restaurantID);
+                            i.putExtra("lobby", lobby);
+                            startActivity(i);
+                            finish();
+                        }
                     }
                 }
                 else {
@@ -313,36 +326,34 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
     }
 
     // Check again the number of users in the lobby
-    public void checkLikedRestaurant() {
-        Lobby lobby = (Lobby) Parcels.unwrap(getIntent().getParcelableExtra("lobby"));
-        ParseQuery<LikedRestaurant> query = ParseQuery.getQuery(LikedRestaurant.class);
-        query.findInBackground(new FindCallback<LikedRestaurant>() {
-            @Override
-            public void done(List<LikedRestaurant> objects, ParseException e) {
-                if (e == null) {
-                    for (LikedRestaurant restaurant: objects) {
-                        if (restaurant.getLikes() == numUsers) {
-                            //Return to main lobby
-                            Log.i("RestaurantActitvity", "Go to Result Activity");
-                            // Need to find a way to retrieve this info
-                            Item restaurantInfo = /**/;
-                            Intent i = new Intent(mContext, ResultActivity.class);
-                            i.putExtra("restaurantName", restaurantInfo.getVenue().getName());
-                            i.putExtra("restaurantAddress", restaurantInfo.getVenue().getLocation().getAddress());
-                            i.putExtra("restaurantPhotoUrl", restaurantInfo.getPhotoUrl().get(0));
-                            i.putExtra("lobby", Parcels.wrap(lobby));
-                            mContext.startActivity(i);
-                        }
-                    }
-                }
-            }
-        });
-    }
+//    public void checkLikedRestaurant() {
+//        Lobby lobby = (Lobby) Parcels.unwrap(getIntent().getParcelableExtra("lobby"));
+//        ParseQuery<LikedRestaurant> query = ParseQuery.getQuery(LikedRestaurant.class);
+//        query.findInBackground(new FindCallback<LikedRestaurant>() {
+//            @Override
+//            public void done(List<LikedRestaurant> objects, ParseException e) {
+//                if (e == null) {
+//                    for (LikedRestaurant restaurant: objects) {
+//                        if (restaurant.getLikes() == numUsers) {
+//                            //Return to main lobby
+//                            Log.i("RestaurantActitvity", "Go to Result Activity");
+//                            // Need to find a way to retrieve this info
+//                            Item restaurantInfo = /**/;
+//                            Intent i = new Intent(mContext, ResultActivity.class);
+//                            i.putExtra("restaurantName", restaurantInfo.getVenue().getName());
+//                            i.putExtra("restaurantAddress", restaurantInfo.getVenue().getLocation().getAddress());
+//                            i.putExtra("restaurantPhotoUrl", restaurantInfo.getPhotoUrl().get(0));
+//                            i.putExtra("lobby", Parcels.wrap(lobby));
+//                            mContext.startActivity(i);
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//
+//    }
 
-    public void readLikedRestaurants() {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("likedRestaurants");
 
-    }
 
     @Override
     public void onCardRewound() {
