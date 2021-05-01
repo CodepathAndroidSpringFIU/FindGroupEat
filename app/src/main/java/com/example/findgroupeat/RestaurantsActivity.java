@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DiffUtil;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -302,7 +303,10 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
                         // Check again the number of users in the lobby
 
                         if (objects.get(0).getLikes() == numUsers) {
-                            //Return to main lobby
+                            Intent i = new Intent(RestaurantsActivity.this,ResultActivity.class);
+                            String restaurantID = restaurantList.get(cardStackLayoutManager.getTopPosition()).getVenue().getId();
+                            i.putExtra("restaurantID", restaurantID);
+                            startActivity(i);
                         }
                     }
                 }
