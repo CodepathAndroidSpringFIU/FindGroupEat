@@ -25,6 +25,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".ui.RestaurantDetailsActivity"></activity>
         <activity android:name=".RestaurantsActivity" />
+        <activity android:name=".ResultActivity" />
 
         <service android:name=".models.GPSTracker" />
 

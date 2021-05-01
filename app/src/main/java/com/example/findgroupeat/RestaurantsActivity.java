@@ -302,8 +302,8 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
                         objects.get(0).saveInBackground();
                         // Check again the number of users in the lobby
 
-                        if (objects.get(0).getLikes() == numUsers) {
-                            Intent i = new Intent(RestaurantsActivity.this,ResultActivity.class);
+                        if (objects.get(0).getLikes() >= numUsers) {
+                            Intent i = new Intent(RestaurantsActivity.this, ResultActivity.class);
                             String restaurantID = restaurantList.get(cardStackLayoutManager.getTopPosition()).getVenue().getId();
                             i.putExtra("restaurantID", restaurantID);
                             startActivity(i);

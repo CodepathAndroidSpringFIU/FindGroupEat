@@ -3,6 +3,7 @@ package com.example.findgroupeat;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.example.findgroupeat.models.bestphoto.Bestphotoreal2;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -10,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,10 +42,11 @@ public class ResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        ivResultsPic = findViewById(R.id.ivResultPic);
         tvResultAddress = findViewById(R.id.tvResultAddress);
         tvResultName = findViewById(R.id.tvResultName);
-        tvResultDescription = findViewById(R.id.tvRestaurantDescription);
-        tvResultNumber = findViewById(R.id.tvRestaurantDescription);
+        tvResultDescription = findViewById(R.id.tvResultDescription);
+        tvResultNumber = findViewById(R.id.tvResultNumber);
         setSupportActionBar(toolbar);
         RxJava3CallAdapterFactory rxAdapter = RxJava3CallAdapterFactory.create();
         if (retrofit == null) {
@@ -66,13 +69,23 @@ public class ResultActivity extends AppCompatActivity {
                 Bestphotoreal2 results = response.body();
 
                 String name = results.getResponse().getVenue().getName();
-                String description = results.getResponse().getVenue().getDescription();
+                //String description = results.getResponse().getVenue().getDescription();  //Doesn't work currently
                 String address = results.getResponse().getVenue().getLocation().getAddress();
                 String number = results.getResponse().getVenue().getContact().getPhone();
+                String picturePrefix = results.getResponse().getVenue().getBestPhoto().getPrefix();
+                String pictureSuffix= results.getResponse().getVenue().getBestPhoto().getSuffix();
+                String photoUrl = picturePrefix + "150x150" + pictureSuffix;
+
+                Glide.with(getApplication())
+                        .load(photoUrl)
+                        .centerCrop()
+                        .into(ivResultsPic);
+
+                Log.v("ResultActivity", "the following items are: " + name + " " + address + " " + number);
 
                 tvResultName.setText(name);
                 tvResultAddress.setText(address);
-                tvResultDescription.setText(description);
+                //tvResultDescription.setText(description); //Doesn't work currently.
                 tvResultNumber.setText(number);
 
             }
@@ -82,6 +95,7 @@ public class ResultActivity extends AppCompatActivity {
 
             }
         });
+
 
     }
 }
