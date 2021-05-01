@@ -311,7 +311,7 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
                             Lobby lobby = (Lobby) Parcels.unwrap(getIntent().getParcelableExtra("lobby"));
                             String lobbyObjectId = lobby.getObjectId();
                             i.putExtra("restaurantID", restaurantID);
-                            i.putExtra("lobby", lobby);
+                            i.putExtra("lobbyObjectId", lobbyObjectId);
                             startActivity(i);
                             finish();
                         }

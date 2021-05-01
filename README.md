@@ -118,3 +118,8 @@ An app that allows the user to group up with 1-6 other users and search nearby r
     * (Update/PUT) Update the user information
 - Restauraunts swiping page
     * (Read/GET) Query a list of restaurants based on the group information
+
+
+### App Walkthough GIF
+
+<img src="https://raw.githubusercontent.com/CodepathAndroidSpringFIU/FindGroupEat/master/findgroupeatgif.gif" width=250><br>

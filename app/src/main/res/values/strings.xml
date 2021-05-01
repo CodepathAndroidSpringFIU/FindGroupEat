@@ -21,5 +21,7 @@
     <string name="_561_443_4444">561-443-4444</string>
     <string name="let_s_swipe">Let\'s Swipe</string>
     <string name="search">Search</string>
+    <string name="description_of_restaurant">Description of restaurant</string>
+    <string name="leave_lobby">Leave Lobby</string>
 
 </resources>
