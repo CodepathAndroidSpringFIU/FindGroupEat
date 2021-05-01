@@ -52,4 +52,22 @@
         android:text="test1@gmail.com"
         android:textSize="18sp"
         tools:layout_below="@id/tvName" />
+
+    <ListView
+        android:id="@+id/lvHistory"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tvText"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/tvText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnLogout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="History of restaurants"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 </RelativeLayout>

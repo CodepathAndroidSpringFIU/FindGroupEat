@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,12 +23,18 @@ import com.example.findgroupeat.ui.LoginActivity;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProfileFragment extends Fragment {
 
     Button btnLogout;
     TextView tvName;
     TextView tvEmail;
     ImageView ivAvatar;
+    ListView lvHistory;
+    List<String> history;
+    ArrayAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,6 +49,7 @@ public class ProfileFragment extends Fragment {
         tvName = view.findViewById(R.id.tvName);
         tvEmail = view.findViewById(R.id.tvEmailProfile);
         ivAvatar = view.findViewById(R.id.ivAvatar);
+        lvHistory = view.findViewById(R.id.lvHistory);
 
         ParseUser user = ParseUser.getCurrentUser();
         tvName.setText(user.getUsername());
@@ -58,6 +67,11 @@ public class ProfileFragment extends Fragment {
                     .transform(new CircleCrop())
                     .into(ivAvatar);
 
+        List<String> history = new ArrayList<>();
+        adapter = new ArrayAdapter(getContext(), R.layout.history, R.id.tvHistoryName, history);
+        lvHistory.setAdapter(adapter);
+        queryHistory(user);
+
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,5 +81,13 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(getContext(), "Successfully log out", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void queryHistory(ParseUser user) {
+        List<String> temp = user.getList("restaurants");
+        if (temp != null) {
+            history.addAll(temp);
+            adapter.notifyDataSetChanged();
+        }
     }
 }

@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide;
 import com.example.findgroupeat.models.bestphoto.Bestphotoreal2;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.parse.FindCallback;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -31,6 +32,9 @@ import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -110,7 +114,8 @@ public class ResultActivity extends AppCompatActivity {
                 tvResultDescription.setText(description);
                 tvResultNumber.setText("Phone Number: " + number);
 
-                //delete the lobby.
+                // add to user's history
+                addToHistory(lobby, name);
             }
 
             @Override
@@ -124,7 +129,7 @@ public class ResultActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(ResultActivity.this, MainActivity.class);
                 startActivity(i);
-                //Remove the user from looby
+                //Remove the user from lobby
                 lobby.removeUser(ParseUser.getCurrentUser());
                 //Check number of users in the lobby, if it's 0 then delete the lobby
                 try {
@@ -138,6 +143,22 @@ public class ResultActivity extends AppCompatActivity {
             }
          });
         }
+
+    private void addToHistory(Lobby lobby, String name) {
+        ParseQuery<ParseUser> users = lobby.getUsers().getQuery();
+        users.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                if (e != null) {
+                    Log.e("ResultActivity", "Error in getting users");
+                }
+                for (ParseUser user: objects) {
+                    user.add("restaurants", name);
+                    user.saveInBackground();
+                }
+            }
+        });
+    }
 
     public int getUserNumInLobby() throws ParseException {
         Lobby lobby = (Lobby) Parcels.unwrap(getIntent().getParcelableExtra("lobby"));
