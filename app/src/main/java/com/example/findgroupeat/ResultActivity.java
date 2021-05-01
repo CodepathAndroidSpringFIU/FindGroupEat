@@ -81,7 +81,7 @@ public class ResultActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         String restaurantID = i.getStringExtra("restaurantID");
-        Lobby lobby = (Lobby) Parcels.unwrap(getIntent().getParcelableExtra("lobby"));
+        String lobbyObjectId = i.getStringExtra("lobbyObjectId");
 
         Call<Bestphotoreal2> call2 = restaurantService.getRestaurantDetails(restaurantID, CLIENT_ID, CLIENT_SECRET, version);
 
@@ -124,25 +124,38 @@ public class ResultActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(ResultActivity.this, MainActivity.class);
                 startActivity(i);
+                finish();
                 //Remove the user from looby
-                lobby.removeUser(ParseUser.getCurrentUser());
+
                 //Check number of users in the lobby, if it's 0 then delete the lobby
-                try {
-                    if (getUserNumInLobby() == 0) {
-                        lobby.deleteInBackground();
-                    }
-                } catch (ParseException e) {
-                    Log.e("ResultActivity", e.toString());
-                }
+                deleteLobby(lobbyObjectId);
 
             }
          });
         }
 
-    public int getUserNumInLobby() throws ParseException {
-        Lobby lobby = (Lobby) Parcels.unwrap(getIntent().getParcelableExtra("lobby"));
-        ParseQuery<ParseUser> users = lobby.getUsers().getQuery();
-        return users.count();
+    public void deleteLobby(String lobbyObjectId) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Lobby");
+        query.getInBackground(lobbyObjectId, (object, e) -> {
+            if (e == null) {
+                //Object was fetched
+                //Deletes the fetched ParseObject from the database
+                object.deleteInBackground(e2 -> {
+                    if (e2 == null) {
+                        Toast.makeText(this, "Delete Successful", Toast.LENGTH_SHORT).show();
+                    } else {
+                        //Something went wrong while deleting the Object
+                        Toast.makeText(this, "Error: " + e2.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                //Something went wrong
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
+
+
 
 }
