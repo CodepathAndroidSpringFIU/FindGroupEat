@@ -40,6 +40,8 @@ dependencies {
     implementation 'org.parceler:parceler-api:1.1.12'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'androidx.navigation:navigation-fragment:2.3.4'
+    implementation 'androidx.navigation:navigation-ui:2.3.4'
     annotationProcessor 'org.parceler:parceler:1.1.12'
     implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
     implementation "io.reactivex.rxjava3:rxjava:3.0.0"

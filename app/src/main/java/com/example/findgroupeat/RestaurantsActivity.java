@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DiffUtil;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import com.example.findgroupeat.models.bestphoto.Bestphotoreal2;
 
 import com.example.findgroupeat.models.parsemodels.LikedRestaurant;
 import com.example.findgroupeat.models.parsemodels.Lobby;
+import com.example.findgroupeat.ui.RestaurantDetailsActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.parse.CountCallback;
@@ -276,6 +278,7 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
         ParseQuery<ParseUser> users = lobby.getUsers().getQuery();
         return users.count();
     }
+
     public void createLikedRestaurant() {
         int topPosition = cardStackLayoutManager.getTopPosition();
         String likedRestaurantID = adapter.getRestaurants().get(topPosition).getVenue().getId();
@@ -299,11 +302,6 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
                     else {
                         objects.get(0).increment("likes");
                         objects.get(0).saveInBackground();
-                        // Check again the number of users in the lobby
-
-                        if (objects.get(0).getLikes() == numUsers) {
-                            //Return to main lobby
-                        }
                     }
                 }
                 else {
@@ -311,17 +309,34 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
                 }
             }
         });
-//        ParseObject likedRestaurants = new ParseObject("LikedRestaurants");
-//        likedRestaurants.put("restaurantID", likedRestaurantID);
-//        likedRestaurants.put("UsersLikedRestaurantsTest", ParseUser.getCurrentUser());
-//        likedRestaurants.put("UserWhoLikedRestaurant", ParseUser.getCurrentUser());
-//        likedRestaurants.saveInBackground(e ->  {
-//            if (e == null) {
-//                //saved
-//            } else {
-//                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-//            }
-//        });
+
+    }
+
+    // Check again the number of users in the lobby
+    public void checkLikedRestaurant() {
+        Lobby lobby = (Lobby) Parcels.unwrap(getIntent().getParcelableExtra("lobby"));
+        ParseQuery<LikedRestaurant> query = ParseQuery.getQuery(LikedRestaurant.class);
+        query.findInBackground(new FindCallback<LikedRestaurant>() {
+            @Override
+            public void done(List<LikedRestaurant> objects, ParseException e) {
+                if (e == null) {
+                    for (LikedRestaurant restaurant: objects) {
+                        if (restaurant.getLikes() == numUsers) {
+                            //Return to main lobby
+                            Log.i("RestaurantActitvity", "Go to Result Activity");
+                            // Need to find a way to retrieve this info
+                            Item restaurantInfo = /**/;
+                            Intent i = new Intent(mContext, ResultActivity.class);
+                            i.putExtra("restaurantName", restaurantInfo.getVenue().getName());
+                            i.putExtra("restaurantAddress", restaurantInfo.getVenue().getLocation().getAddress());
+                            i.putExtra("restaurantPhotoUrl", restaurantInfo.getPhotoUrl().get(0));
+                            i.putExtra("lobby", Parcels.wrap(lobby));
+                            mContext.startActivity(i);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     public void readLikedRestaurants() {

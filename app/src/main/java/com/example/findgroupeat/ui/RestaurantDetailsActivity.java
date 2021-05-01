@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,7 +44,6 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         tvRestaurantName.setText(name);
         tvRestaurantHours.setText(hours);
         tvRestaurantDescription.setText(description);
-
         Glide.with(this)
                 .load(photoUrl)
                 .centerCrop()
