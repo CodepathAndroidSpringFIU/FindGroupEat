@@ -84,6 +84,7 @@ public class LobbyActivity extends AppCompatActivity {
                         usernames.remove(user.getUsername());
                         fragment = new HomeFragment();
                         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                        finish();
                     }
 
 

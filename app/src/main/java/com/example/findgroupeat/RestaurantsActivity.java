@@ -305,8 +305,12 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
                         if (objects.get(0).getLikes() >= numUsers) {
                             Intent i = new Intent(RestaurantsActivity.this, ResultActivity.class);
                             String restaurantID = restaurantList.get(0).getVenue().getId();
+                            Lobby lobby = (Lobby) Parcels.unwrap(getIntent().getParcelableExtra("lobby"));
+                            String lobbyObjectId = lobby.getObjectId();
                             i.putExtra("restaurantID", restaurantID);
+                            i.putExtra("lobbyObjectId", lobbyObjectId);
                             startActivity(i);
+                            finish();
                         }
                     }
                 }
