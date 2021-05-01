@@ -311,23 +311,10 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
                 }
             }
         });
-//        ParseObject likedRestaurants = new ParseObject("LikedRestaurants");
-//        likedRestaurants.put("restaurantID", likedRestaurantID);
-//        likedRestaurants.put("UsersLikedRestaurantsTest", ParseUser.getCurrentUser());
-//        likedRestaurants.put("UserWhoLikedRestaurant", ParseUser.getCurrentUser());
-//        likedRestaurants.saveInBackground(e ->  {
-//            if (e == null) {
-//                //saved
-//            } else {
-//                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-//            }
-//        });
+//
     }
 
-    public void readLikedRestaurants() {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("likedRestaurants");
 
-    }
 
     @Override
     public void onCardRewound() {
