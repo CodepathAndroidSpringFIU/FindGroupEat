@@ -34,7 +34,7 @@ An app that allows the user to group up with 1-6 other users and search nearby r
 - [x] User can click on restauraunt and see details such as type of food they serve, menu, more pictures of inside, outside, reviews, etc.
 - [x] User can search for a lobby
 - [x] User can use the bottom navigation to direct to an activity
-- [ ] User can see the most chosen restaurant in the lobby 
+- [x] User will see the match screen when the users of the lobby all decide upon a restaurant
 
 
 **Optional Nice-to-have Stories**
