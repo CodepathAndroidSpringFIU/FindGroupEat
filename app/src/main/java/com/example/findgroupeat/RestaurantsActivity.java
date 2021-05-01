@@ -304,7 +304,7 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
 
                         if (objects.get(0).getLikes() >= numUsers) {
                             Intent i = new Intent(RestaurantsActivity.this, ResultActivity.class);
-                            String restaurantID = restaurantList.get(cardStackLayoutManager.getTopPosition()).getVenue().getId();
+                            String restaurantID = restaurantList.get(0).getVenue().getId();
                             i.putExtra("restaurantID", restaurantID);
                             startActivity(i);
                         }

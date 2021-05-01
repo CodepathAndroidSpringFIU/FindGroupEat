@@ -16,4 +16,6 @@
     <string name="close_drawer">Close drawer</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="restaurant_s_address">Restaurant\'s Address</string>
+    <string name="_561_443_4444">561-443-4444</string>
 </resources>

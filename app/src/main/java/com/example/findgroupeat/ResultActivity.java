@@ -69,9 +69,9 @@ public class ResultActivity extends AppCompatActivity {
                 Bestphotoreal2 results = response.body();
 
                 String name = results.getResponse().getVenue().getName();
-                //String description = results.getResponse().getVenue().getDescription();  //Doesn't work currently
+                String description = results.getResponse().getVenue().getDescription();//Doesn't work currently
                 String address = results.getResponse().getVenue().getLocation().getAddress();
-                String number = results.getResponse().getVenue().getContact().getPhone();
+                String number = results.getResponse().getVenue().getContact().getFormattedPhone();
                 String picturePrefix = results.getResponse().getVenue().getBestPhoto().getPrefix();
                 String pictureSuffix= results.getResponse().getVenue().getBestPhoto().getSuffix();
                 String photoUrl = picturePrefix + "150x150" + pictureSuffix;
@@ -84,9 +84,9 @@ public class ResultActivity extends AppCompatActivity {
                 Log.v("ResultActivity", "the following items are: " + name + " " + address + " " + number);
 
                 tvResultName.setText(name);
-                tvResultAddress.setText(address);
-                //tvResultDescription.setText(description); //Doesn't work currently.
-                tvResultNumber.setText(number);
+                tvResultAddress.setText("Address: " + address);
+                tvResultDescription.setText(description);
+                tvResultNumber.setText("Phone Number: " + number);
 
             }
 

@@ -77,7 +77,7 @@ public class Venue {
      * @param categories
      * @param beenHere
      */
-    public Venue(String id, String name, Contact contact, Location location, List<Category> categories, Boolean verified, Stats stats, Delivery delivery, BeenHere beenHere, String referralId, List<Object> venueChains, Boolean hasPerk) {
+    public Venue(String id, String name, Contact contact, Location location, List<Category> categories, String description, Boolean verified, Stats stats, Delivery delivery, BeenHere beenHere, String referralId, List<Object> venueChains, Boolean hasPerk) {
         super();
         this.id = id;
         this.name = name;
@@ -91,6 +91,7 @@ public class Venue {
         this.referralId = referralId;
         this.venueChains = venueChains;
         this.hasPerk = hasPerk;
+        this.description = description;
     }
 
     public DefaultHours getDefaultHours() {

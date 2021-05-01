@@ -9,29 +9,31 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/matchFound"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="96dp"
-        android:layout_marginTop="94dp"
+        android:layout_marginStart="105dp"
+        android:layout_marginTop="49dp"
         android:text="Match found!"
         android:textSize="25sp"
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/tvResultName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvResultName"
+        android:layout_below="@+id/matchFound"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="101dp"
-        android:layout_marginTop="142dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="111dp"
+        android:layout_marginTop="23dp"
         android:text="Restaurant's name"
-        android:textSize="15sp" />
+        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/ivResultPic"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="168dp"
         android:layout_marginEnd="152dp"
@@ -44,31 +46,32 @@
         android:id="@+id/tvResultAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/ivResultPic"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_centerVertical="true"
         android:layout_marginStart="27dp"
-        android:layout_marginBottom="365dp"
-        android:text="Restaurant's Address" />
+        android:layout_marginTop="29dp"
+        android:text="@string/restaurant_s_address" />
 
     <TextView
+        android:id="@+id/tvResultNumber"
+        android:layout_width="176dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvResultDescription"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="29dp"
+        android:layout_marginEnd="211dp"
+        android:text="@string/_561_443_4444" />
+
+    <TextView
+        android:id="@+id/tvResultDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvResultAddress"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="23dp"
-        android:layout_marginTop="-155dp"
-        android:id="@+id/tvResultNumber"
-        android:layout_marginBottom="75dp"
-        android:text="restaurants Number" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="23dp"
-        android:layout_marginBottom="205dp"
-        android:text="Description of restaurant"
-        android:id="@+id/tvResultDescription"/>
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="26dp"
+        android:text="Description of restaurant" />
 </RelativeLayout>
