@@ -11,9 +11,9 @@
         android:id="@+id/etLobbyName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/tvLabel"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="100dp"
         android:ems="10"
         android:hint="Lobby Name"
         tools:layout_editor_absoluteX="100dp"
@@ -41,5 +41,16 @@
         android:text="Enter Lobby"
         android:textColor="#FFFFFF"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="75dp"
+        android:text="Already have a lobby? Let's join!"
+        android:textAlignment="center"
+        android:textSize="36sp"
+        android:textStyle="normal" />
 
 </RelativeLayout>

@@ -14,7 +14,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:text="Match Found!"
-        android:textColor="#F44336"
+        android:textColor="@android:color/holo_red_light"
         android:textSize="36sp"
         android:textStyle="bold" />
 
@@ -81,8 +81,8 @@
         android:layout_below="@+id/tvResultNumber"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:background="#000000"
-        android:text="Exit Lobby"
+        android:background="@android:color/holo_red_light"
+        android:text="Leave Lobby"
         android:textColor="#FFFFFF"
         android:textStyle="bold" />
 
