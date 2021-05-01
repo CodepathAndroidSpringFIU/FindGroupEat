@@ -85,7 +85,7 @@ public class ResultActivity extends AppCompatActivity {
                         .centerCrop()
                         .into(ivResultsPic);
 
-                Log.v("ResultActivity", "the following items are: " + name + " " + address + " " + number);
+                Log.v("ResultActivity", "the following items are: " + name + " " + address + " " + number + " " + description);
 
                 tvResultName.setText(name);
                 tvResultAddress.setText("Address: " + address);
@@ -94,7 +94,7 @@ public class ResultActivity extends AppCompatActivity {
 
                 //delete the lobby.
 
-                //deleteLobby(lobbyObjectId);
+                deleteLobby(lobbyObjectId);
 
 
 
