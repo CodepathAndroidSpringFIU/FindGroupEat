@@ -118,7 +118,7 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
                 fullCoordinates = gps.getLatitude() + "," + gps.getLongitude();
 
                 // \n is for new line
-                Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
             } else {
                 // Can't get location.
                 // GPS or network is not enabled.
@@ -223,7 +223,6 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
                         Log.v(TAG, "restaurant List Size is : " + restaurantList.size());
                         restaurantList.get(i).addPhotoUrl(photoUrlList, photoUrl);
                         restaurantList.get(i).setPhotoUrl(photoUrlList);
-                        //restaurantList.get(i).getVenue().getDefaultHours().setStatus(status);
 
 
 
