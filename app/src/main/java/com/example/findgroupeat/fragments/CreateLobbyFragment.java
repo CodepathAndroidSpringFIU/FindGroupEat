@@ -75,14 +75,14 @@ public class CreateLobbyFragment extends Fragment {
                                     Intent i = new Intent(getContext(), LobbyActivity.class);
                                     i.putExtra("lobby", Parcels.wrap(lobby));
                                     startActivity(i);
-                                    Toast.makeText(getContext(), "Create lobby successfully!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "Created lobby successfully!", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
                         else {
                             etName.setText("");
                             etPass.setText("");
-                            Toast.makeText(getContext(), "Something goes wrong. Try again!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Something went wrong. Try again!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

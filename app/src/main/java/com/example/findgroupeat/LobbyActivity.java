@@ -81,9 +81,10 @@ public class LobbyActivity extends AppCompatActivity {
                             Log.e("LobbyActivity", "Error in getting users");
                         }
                         ParseUser user = ParseUser.getCurrentUser();
-                        usernames.remove(user.getUsername());
-                        fragment = new HomeFragment();
-                        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                        objects.remove(user.getUsername());
+                        lobby.removeUser(user);
+                        Intent i = new Intent(LobbyActivity.this, MainActivity.class);
+                        startActivity(i);
                         finish();
                     }
 
@@ -106,19 +107,16 @@ public class LobbyActivity extends AppCompatActivity {
 
     private void queryUsers(ParseQuery<ParseUser> query, List<String> usernames) {
         usernames.clear();
-        query.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> users, ParseException e) {
-                if (e != null) {
-                    Log.e("LobbyActivity", "Error in getting users");
-                }
-
-                for (ParseUser user : users) {
-                    usernames.add(user.getUsername());
-                }
-                adapter.notifyDataSetChanged();
-                swipeContainer.setRefreshing(false);
+        query.findInBackground((users, e) -> {
+            if (e != null) {
+                Log.e("LobbyActivity", "Error in getting users");
             }
+
+            for (ParseUser user : users) {
+                usernames.add(user.getUsername());
+            }
+            adapter.notifyDataSetChanged();
+            swipeContainer.setRefreshing(false);
         });
     }
 

@@ -265,7 +265,9 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
 
     @Override
     public void onCardSwiped(Direction direction) {
-        createLikedRestaurant();
+        if (direction == Direction.Right) {
+            createLikedRestaurant();
+        }
         if (cardStackLayoutManager.getTopPosition() == adapter.getItemCount() - 5) {
             paginate();
         }
@@ -303,7 +305,7 @@ public class RestaurantsActivity extends AppCompatActivity implements CardStackL
 
                         if (objects.get(0).getLikes() >= numUsers) {
                             Intent i = new Intent(RestaurantsActivity.this, ResultActivity.class);
-                            String restaurantID = restaurantList.get(0).getVenue().getId();
+                            String restaurantID = restaurantList.get(cardStackLayoutManager.getTopPosition()-1).getVenue().getId();
                             Lobby lobby = (Lobby) Parcels.unwrap(getIntent().getParcelableExtra("lobby"));
                             String lobbyObjectId = lobby.getObjectId();
                             i.putExtra("restaurantID", restaurantID);
