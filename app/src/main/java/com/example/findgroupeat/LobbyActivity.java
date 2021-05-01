@@ -9,12 +9,17 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.findgroupeat.fragments.HomeFragment;
 import com.example.findgroupeat.models.parsemodels.Lobby;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -28,15 +33,19 @@ public class LobbyActivity extends AppCompatActivity {
     TextView tvLobbyName;
     ListView lvUsers;
     Button btnSwipe;
+    Button btnLeave;
     SwipeRefreshLayout swipeContainer;
     List<String> usernames;
     ArrayAdapter adapter;
+    Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
+        final FragmentManager fragmentManager = getSupportFragmentManager();
 
+        btnLeave = findViewById(R.id.btnLeave);
         tvLobbyName = findViewById(R.id.tvLobbyName);
         lvUsers = findViewById(R.id.lvUsers);
         btnSwipe = findViewById(R.id.btnSwipe);
@@ -57,6 +66,30 @@ public class LobbyActivity extends AppCompatActivity {
                 Intent i = new Intent(LobbyActivity.this, RestaurantsActivity.class);
                 i.putExtra("lobby", Parcels.wrap(lobby));
                 startActivity(i);
+            }
+        });
+
+        btnLeave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //To-do, add alert dialog asking if they are sure they wish to leave the lobby
+                usernames.clear();
+                query.findInBackground(new FindCallback<ParseUser>() {
+                    @Override
+                    public void done(List<ParseUser> objects, ParseException e) {
+                        if (e != null) {
+                            Log.e("LobbyActivity", "Error in getting users");
+                        }
+                        ParseUser user = ParseUser.getCurrentUser();
+                        usernames.remove(user.getUsername());
+                        fragment = new HomeFragment();
+                        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                    }
+
+
+                });
+                adapter.notifyDataSetChanged();
+                swipeContainer.setRefreshing(false);
             }
         });
 

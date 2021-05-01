@@ -28,6 +28,11 @@ public class Lobby extends ParseObject {
         saveInBackground();
     }
 
+    public void removeUser(ParseUser user) {
+        getUsers().remove(user);
+        saveInBackground();
+    }
+
     public String getName() {
         return getString(KEY_NAME);
     }
